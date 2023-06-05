@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model orders {
+  orderid   Int     @id
+  ordername String  @db.VarChar(255)
+  users     users[]
+}
+
+model users {
+  personid Int    @id(map: "pk_users") @default(autoincrement())
+  fullname String @db.VarChar(255)
+  email    String @unique @db.VarChar(255)
+  orderid  Int
+  birthday DateTime @default(now())
+  orders   orders @relation(fields: [orderid], references: [orderid], onDelete: NoAction, onUpdate: NoAction, map: "fk_orders")
+}
