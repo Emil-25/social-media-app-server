@@ -7,17 +7,42 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model orders {
-  orderid   Int     @id
-  ordername String  @db.VarChar(255)
-  users     users[]
+model comments {
+  id            Int      @id(map: "comments_id_pkey") @unique @default(autoincrement())
+  comment       String   @db.VarChar(511)
+  createdAt     DateTime @default(now()) @db.Timestamp(6)
+  userId        Int
+  postId        Int
+  numberOfLikes Int?     @default(0)
+  posts         posts    @relation(fields: [postId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users         users    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model posts {
+  id            Int        @id(map: "posts_id_pkey") @unique @default(autoincrement())
+  title         String     @db.VarChar(255)
+  description   String?
+  userId        Int
+  url           String?    @unique(map: "posts_url_unique")
+  createdAt     DateTime   @default(now()) @db.Timestamp(6)
+  numberOfLikes Int?       @default(0)
+  commentIds    Int[]
+  comments      comments[]
+  users         users      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model users {
-  personid Int    @id(map: "pk_users") @default(autoincrement())
-  fullname String @db.VarChar(255)
-  email    String @unique @db.VarChar(255)
-  orderid  Int
-  birthday DateTime @default(now())
-  orders   orders @relation(fields: [orderid], references: [orderid], onDelete: NoAction, onUpdate: NoAction, map: "fk_orders")
+  id           Int        @id(map: "users_id_pkey") @unique @default(autoincrement())
+  fullname     String     @db.VarChar(255)
+  email        String     @unique @db.VarChar(255)
+  password     String     @db.VarChar(255)
+  bio          String?    @default("I love LimeLink!")
+  interests    String[]   @db.VarChar(255)
+  birthDate    DateTime?  @db.Date
+  isOnline     Boolean    @default(false)
+  postIds      Int[]
+  followerIds  Int[]
+  followingIds Int[]
+  comments     comments[]
+  posts        posts[]
 }
