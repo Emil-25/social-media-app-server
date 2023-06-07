@@ -33,7 +33,7 @@ model posts {
 
 model users {
   id           Int        @id(map: "users_id_pkey") @unique @default(autoincrement())
-  fullname     String     @db.VarChar(255)
+  fullName     String     @db.VarChar(255)
   email        String     @unique @db.VarChar(255)
   password     String     @db.VarChar(255)
   bio          String?    @default("I love LimeLink!")

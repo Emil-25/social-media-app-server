@@ -27,7 +27,7 @@ CREATE TABLE "posts" (
 -- CreateTable
 CREATE TABLE "users" (
     "id" SERIAL NOT NULL,
-    "fullname" VARCHAR(255) NOT NULL,
+    "fullName" VARCHAR(255) NOT NULL,
     "email" VARCHAR(255) NOT NULL,
     "password" VARCHAR(255) NOT NULL,
     "bio" TEXT DEFAULT 'I love LimeLink!',
