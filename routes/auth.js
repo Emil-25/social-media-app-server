@@ -1,16 +1,11 @@
 var express = require('express');
 var router = express.Router();
+const { checkAuth } = require('../middlewares/checkauth')
+const authController = require('../controller/authController')
 
-router.post('/signup', function(req, res, next) {
-    console.log(req.body)
-    const hah = {
-        user: 1,
-        body: req.body
+router.post('/signup', authController.sign_up_validation(), authController.handle_sign_up_validation, authController.sign_up_user);
 
-    }
-    res.json(hah);
-});
-
+router.get('/me', checkAuth, authController.get_me)
 
 
 module.exports = router;
