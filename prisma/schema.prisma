@@ -33,10 +33,11 @@ model posts {
 
 model users {
   id           Int        @id(map: "users_id_pkey") @unique @default(autoincrement())
-  fullName     String     @db.VarChar(255)
+  fullname     String     @db.VarChar(255)
   email        String     @unique @db.VarChar(255)
   password     String     @db.VarChar(255)
   bio          String?    @default("I love LimeLink!")
+  avatar       String?    @db.VarChar(511)
   interests    String[]   @db.VarChar(255)
   birthDate    DateTime?  @db.Date
   isOnline     Boolean    @default(false)

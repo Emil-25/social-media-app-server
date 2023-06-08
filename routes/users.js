@@ -1,18 +1,21 @@
+const { profileUpload } = require('../config/multer.config')
 var express = require('express');
 var router = express.Router();
 const userController = require('../controller/userController')
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+    res.json('respond with a resource');
 });
 
-router.post('/', function(req, res, next) {
-    console.log(req.body)
-    res.send(req.body);
+router.get('/', function(req, res, next) {
+    res.json("haha")
 });
 
-router.get('/:id', userController.get_user);
+// router.post('/me', profileUpload.single('avatar'), userController.me)
+router.post('/me', profileUpload.single('avatar'), userController.me)
+
+router.get('/:id',  userController.get_user);
 
 
 

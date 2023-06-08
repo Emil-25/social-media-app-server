@@ -10,6 +10,7 @@ CREATE TABLE "users" (
     "email" VARCHAR(255) NOT NULL,
     "password" VARCHAR(255) NOT NULL,
     "bio" TEXT DEFAULT 'I love LimeLink!',
+    "avatar" VARCHAR(511),
     "interests" VARCHAR(255) [],
     "birthDate" DATE,
     "isOnline" BOOLEAN NOT NULL DEFAULT FALSE,
