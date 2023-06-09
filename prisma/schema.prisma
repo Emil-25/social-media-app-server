@@ -40,10 +40,12 @@ model users {
   avatar       String?    @db.VarChar(511)
   interests    String[]   @db.VarChar(255)
   birthDate    DateTime?  @db.Date
+  isPrivate    Boolean    @default(false)
   isOnline     Boolean    @default(false)
   postIds      Int[]
-  followerIds  Int[]
+  followerIds  Int[]      
   followingIds Int[]
   comments     comments[]
   posts        posts[]
 }
+

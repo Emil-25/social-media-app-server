@@ -13,6 +13,7 @@ CREATE TABLE "users" (
     "avatar" VARCHAR(511),
     "interests" VARCHAR(255) [],
     "birthDate" DATE,
+    "isPrivate" BOOLEAN NOT NULL DEFAULT FALSE,
     "isOnline" BOOLEAN NOT NULL DEFAULT FALSE,
     "postIds" INTEGER [],
     "followerIds" INTEGER [],
@@ -46,6 +47,14 @@ CREATE TABLE "comments" (
 
     CONSTRAINT "comments_id_pkey" PRIMARY KEY ("id")
 );
+
+CREATE TABLE "followers" {
+    "id": SERIAL,
+    "userId": INTEGER NOT NULL,
+
+    CONSTRAINT "posts_id_pkey" PRIMARY KEY ("id"),
+};
+
 
 CREATE UNIQUE INDEX "users_id_key" ON "users"("id");
 

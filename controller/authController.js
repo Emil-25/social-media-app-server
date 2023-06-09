@@ -212,7 +212,7 @@ exports.get_me = async (req, res, next) => {
         }
 
     } catch (err) {
-        console.log(err, req.user)
+        console.log(err)
         res.status("500").json("There is a server related error")
     }
 }
