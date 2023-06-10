@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
 
 router.post('/me', checkAuth, profileUpload.single('avatar'), userController.patch_my_profile)
 
-router.get('/test',  userController.test)
+router.post('/test', profileUpload.single('avatar') , userController.test)
 
 
 module.exports = router;

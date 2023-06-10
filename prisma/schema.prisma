@@ -32,20 +32,28 @@ model posts {
 }
 
 model users {
-  id           Int        @id(map: "users_id_pkey") @unique @default(autoincrement())
-  fullname     String     @db.VarChar(255)
-  email        String     @unique @db.VarChar(255)
-  password     String     @db.VarChar(255)
-  bio          String?    @default("I love LimeLink!")
-  avatar       String?    @db.VarChar(511)
-  interests    String[]   @db.VarChar(255)
-  birthDate    DateTime?  @db.Date
-  isPrivate    Boolean    @default(false)
-  isOnline     Boolean    @default(false)
-  postIds      Int[]
-  followerIds  Int[]      
-  followingIds Int[]
-  comments     comments[]
-  posts        posts[]
+  id                                 Int        @id(map: "users_id_pkey") @unique @default(autoincrement())
+  fullname                           String     @db.VarChar(255)
+  email                              String     @unique @db.VarChar(255)
+  password                           String     @db.VarChar(255)
+  bio                                String?    @default("I love LimeLink!")
+  avatar                             String?    @db.VarChar(511)
+  interests                          String[]   @db.VarChar(255)
+  birthDate                          DateTime?  @db.Date
+  isPrivate                          Boolean    @default(false)
+  isOnline                           Boolean    @default(false)
+  postIds                            Int[]
+  comments                           comments[]
+  follows_follows_followerIdTousers  follows[]  @relation("follows_followerIdTousers")
+  follows_follows_followingIdTousers follows[]  @relation("follows_followingIdTousers")
+  posts                              posts[]
 }
 
+model follows {
+  followerId                       Int
+  followingId                      Int
+  users_follows_followerIdTousers  users @relation("follows_followerIdTousers", fields: [followerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users_follows_followingIdTousers users @relation("follows_followingIdTousers", fields: [followingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([followerId, followingId], map: "follows_followerId_followingId_pkey")
+}

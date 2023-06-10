@@ -16,8 +16,6 @@ CREATE TABLE "users" (
     "isPrivate" BOOLEAN NOT NULL DEFAULT FALSE,
     "isOnline" BOOLEAN NOT NULL DEFAULT FALSE,
     "postIds" INTEGER [],
-    "followerIds" INTEGER [],
-    "followingIds" INTEGER [],
 
     CONSTRAINT "users_id_pkey" PRIMARY KEY ("id"),
     CONSTRAINT "users_email_unique" UNIQUE("email")
@@ -48,13 +46,12 @@ CREATE TABLE "comments" (
     CONSTRAINT "comments_id_pkey" PRIMARY KEY ("id")
 );
 
-CREATE TABLE "followers" {
-    "id": SERIAL,
-    "userId": INTEGER NOT NULL,
+CREATE TABLE "follows" (
+    "followerId" INTEGER NOT NULL,
+    "followingId" INTEGER NOT NULL,
 
-    CONSTRAINT "posts_id_pkey" PRIMARY KEY ("id"),
-};
-
+    CONSTRAINT "follows_followerId_followingId_pkey" PRIMARY KEY ("followerId", "followingId")
+);
 
 CREATE UNIQUE INDEX "users_id_key" ON "users"("id");
 
@@ -69,3 +66,7 @@ ALTER TABLE "posts" ADD CONSTRAINT "posts_userId_fkey" FOREIGN KEY ("userId") RE
 ALTER TABLE "comments" ADD CONSTRAINT "comments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id");
 
 ALTER TABLE "comments" ADD CONSTRAINT "comments_postId_fkey" FOREIGN KEY ("postId") REFERENCES "posts" ("id");
+
+ALTER TABLE "follows" ADD CONSTRAINT "follows_followerId_fkey" FOREIGN KEY ("followerId") REFERENCES "users" ("id");
+
+ALTER TABLE "follows" ADD CONSTRAINT "follows_followingId_fkey" FOREIGN KEY ("followingId") REFERENCES "users" ("id");

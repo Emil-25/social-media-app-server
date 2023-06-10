@@ -100,28 +100,6 @@ exports.delete_my_profile = async (req, res, next) => {
 }
 
 exports.test = async (req, res, next) => {
-    const users = await prisma.users.findMany({
-        select:{
-            "postIds":true
-        }
-    })
-
-    const postidsArr = users.map((user) => {
-        return user.postIds
-    })
-
-    const postIds = postidsArr.flat()
-
-    const posts = await Promise.all(postIds.map(async (postId) => {
-        const post = await prisma.posts.findUnique({
-            where: {
-                "id": postId
-            }
-        })
-
-        return post
-    }))
-
-
-    res.json(posts)    
+    console.log(req.file)
+    res.json(req.file)
 }
