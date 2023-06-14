@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www"
+    "dev": "nodemon ./bin/www",
+    "prettier": "prettier --write ."
   },
   "dependencies": {
     "@prisma/client": "^4.15.0",
@@ -23,6 +24,7 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.22",
+    "prettier": "^2.8.8",
     "prisma": "^4.15.0"
   }
 }

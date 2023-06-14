@@ -7,7 +7,7 @@ const contentStorage = multer.diskStorage({
   filename: (req, file, cb) => {
     const fileName = `${Date.now()}-${file.originalname}`;
     cb(null, fileName);
-  }
+  },
 });
 
 const profileStorage = multer.diskStorage({
@@ -17,9 +17,8 @@ const profileStorage = multer.diskStorage({
   filename: (req, file, cb) => {
     const fileName = `${Date.now()}-${file.originalname}`;
     cb(null, fileName);
-  }
+  },
 });
 
-exports.contentUpload = multer({ storage:contentStorage });
-exports.profileUpload = multer({ storage:profileStorage });
-
+exports.contentUpload = multer({ storage: contentStorage });
+exports.profileUpload = multer({ storage: profileStorage });
