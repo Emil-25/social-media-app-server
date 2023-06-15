@@ -18,7 +18,17 @@ exports.get_user_post = async (req, res, next) => {
       return res.status('404').json('Post Not Found');
     }
 
-    return res.json(post);
+    const user = await prisma.users.findUnique({
+        where: {
+            "id": post.userId
+        }
+    })
+
+    if (!user) {
+        return res.status('404').json('User Not Found');
+    }
+
+    return res.json({post, user});
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
@@ -49,7 +59,7 @@ exports.get_all_posts = async (req, res, next) => {
 
     if (!posts) return res.status('404').json('No posts');
 
-    return res.json(posts);
+    return res.json({posts, users});
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
@@ -82,7 +92,17 @@ exports.get_following_posts = async (req, res, next) => {
 
     if (!posts) return res.status('404').json('No posts');
 
-    return res.json(posts);
+    const users = await prisma.users.findMany({
+        where:{
+            "id":{
+                in: followingIds
+            }
+        }
+    })
+
+    if (!users) return res.status('404').json('No users');
+
+    return res.json({posts, users});
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
