@@ -6,7 +6,7 @@ exports.get_user_followers = async (req, res, next) => {
   const userId = Number(req.params.followerId);
 
   try {
-    const followers = prisma.followerfollowings.findMany({
+    const followers = prisma.follows.findMany({
       where: {
         followingId: userId,
       },
@@ -25,7 +25,7 @@ exports.get_user_followers = async (req, res, next) => {
       },
     });
 
-    res.json(followerUsers);
+    res.json({followerUsers});
   } catch (err) {
     console.log(err);
     return res.status('500').json('There is a server related error');
@@ -36,7 +36,7 @@ exports.get_user_followings = async (req, res, next) => {
   const userId = Number(req.params.followingId);
 
   try {
-    const followings = prisma.followerfollowings.findMany({
+    const followings = prisma.follows.findMany({
       where: {
         followerId: userId,
       },
@@ -55,7 +55,7 @@ exports.get_user_followings = async (req, res, next) => {
       },
     });
 
-    res.json(followingUsers);
+    res.json({followingUsers});
   } catch (err) {
     console.log(err);
     return res.status('500').json('There is a server related error');
@@ -66,7 +66,7 @@ exports.get_my_followers = async (req, res, next) => {
   try {
     if (!req.user) return res.status('401').json('Unauthorized');
 
-    const followers = await prisma.followerfollowings.findMany({
+    const followers = await prisma.follows.findMany({
       where: {
         followingId: req.user.id,
       },
@@ -85,7 +85,7 @@ exports.get_my_followers = async (req, res, next) => {
       },
     });
 
-    res.json(followerUsers);
+    res.json({followerUsers});
   } catch (err) {
     console.log(err);
     return res.status('500').json('There is a server related error');
@@ -96,7 +96,7 @@ exports.get_my_followings = async (req, res, next) => {
   try {
     if (!req.user) return res.status('401').json('Unauthorized');
 
-    const followings = await prisma.followerfollowings.findMany({
+    const followings = await prisma.follows.findMany({
       where: {
         followerId: req.user.id,
       },
@@ -115,7 +115,7 @@ exports.get_my_followings = async (req, res, next) => {
       },
     });
 
-    res.json(followingUsers);
+    res.json({followingUsers});
   } catch (err) {
     console.log(err);
     return res.status('500').json('There is a server related error');
@@ -128,7 +128,7 @@ exports.add_my_following = async (req, res, next) => {
   try {
     if (!req.user) return res.status('401').json('Unauthorized');
 
-    const createdFollowingFollowers = await prisma.followerfollowings.create({
+    const createdFollowingFollowers = await prisma.follows.create({
       data: {
         followerId: req.user.id,
         followingId: userId,
@@ -150,7 +150,7 @@ exports.delete_my_following = async (req, res, next) => {
   try {
     if (!req.user) return res.status('401').json('Unauthorized');
 
-    const deletedFollowingFollowers = await prisma.followerfollowings.delete({
+    const deletedFollowingFollowers = await prisma.follows.delete({
       where: {
         followerId: req.user.id,
         followingId: userId,
@@ -172,7 +172,7 @@ exports.delete_my_follower = async (req, res, next) => {
   try {
     if (!req.user) return res.status('401').json('Unauthorized');
 
-    const deletedFollowingFollowers = await prisma.followerfollowings.delete({
+    const deletedFollowingFollowers = await prisma.follows.delete({
       where: {
         followerId: userId,
         followingId: req.user.id,

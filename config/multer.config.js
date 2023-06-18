@@ -1,9 +1,7 @@
 const multer = require('multer');
 
 const contentStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, `${process.cwd()}/uploads/content/`);
-  },
+  destination: `./uploads/content/`,
   filename: (req, file, cb) => {
     const fileName = `${Date.now()}-${file.originalname}`;
     cb(null, fileName);
@@ -11,9 +9,7 @@ const contentStorage = multer.diskStorage({
 });
 
 const profileStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, `${process.cwd()}/uploads/profile/`);
-  },
+  destination: `./uploads/profile/`,
   filename: (req, file, cb) => {
     const fileName = `${Date.now()}-${file.originalname}`;
     cb(null, fileName);

@@ -3,7 +3,10 @@ const JWT = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+    log: ['query', 'info', 'warn', 'error'],
+  })
+
 
 exports.sign_up_validation = () => {
   return [
@@ -26,12 +29,14 @@ exports.sign_up_validation = () => {
       .custom(async (value) => {
         const existingUser = await prisma.users.findUnique({
           where: {
-            email: value,
+            "email": value,
           },
         });
+
         if (existingUser) {
           throw Error();
         }
+
         return true;
       })
       .withMessage('Email already in use')
@@ -89,6 +94,15 @@ exports.sign_up_user = async (req, res, next) => {
         password: hashedPassword,
       },
     });
+
+    const follow = await prisma.follows.create({
+        data: {
+            "followerId": user.id,
+            "followingId": user.id
+        }
+    })
+
+    if (!user || !follow) return res.status("500").json("There is a server related error")
 
     const token = JWT.sign(
       {
@@ -154,9 +168,11 @@ exports.log_in_user = async (req, res, next) => {
         );
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = user.password;
 
-    if (hashedPassword !== user.password) {
+    const isSame = await bcrypt.compare(password, hashedPassword);
+
+    if (!isSame) {
       return res
         .status('401')
         .json(
@@ -206,7 +222,7 @@ exports.get_me = async (req, res, next) => {
       }
 
       const userWithoutPassword = exclude(user, ['password']);
-      return res.status('200').json(userWithoutPassword);
+      return res.status('200').json({userWithoutPassword});
     } else {
       return res.status('401').json('Unauthorized');
     }

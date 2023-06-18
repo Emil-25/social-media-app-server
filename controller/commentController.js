@@ -16,19 +16,9 @@ exports.get_post_comments = async (req, res, next) => {
         return res.status('404').json('Post Not Found');
       }
 
-      const userIds = comments.map(comment => comment.userId)
-
-      const users = await prisma.users.findMany({
-        where: {
-            "id": {
-                in: userIds
-            }
-        }
-      })
-
       if (!users) return res.status('500').json('There is a server related error');
   
-      return res.json({comments, users});
+      return res.json({comments});
     } catch (err) {
       console.log(err);
       res.status('500').json('There is a server related error');
@@ -68,7 +58,7 @@ exports.post_comment = async (req, res, next) => {
         }
       })
   
-      return res.json(createdComment);
+      return res.json({createdComment});
     } catch (err) {
       console.log(err);
       res.status('500').json('There is a server related error');

@@ -21,7 +21,7 @@ exports.add_post_like = async (req, res, next) => {
 
         if (!updatedPost) return res.status('500').json('There is a server related error');  
 
-        return res.status("201").json(updatedPost)
+        return res.status("201").json({updatedPost})
 
     } catch (err) {
         console.log(err);
@@ -48,7 +48,7 @@ exports.remove_post_like = async (req, res, next) => {
 
         if (!updatedPost) return res.status('500').json('There is a server related error');  
 
-        return res.status("201").json(updatedPost)
+        return res.status("201").json({updatedPost})
 
     } catch (err) {
         console.log(err);
@@ -75,7 +75,7 @@ exports.add_comment_like = async (req, res, next) => {
 
         if (!updatedComment) return res.status('500').json('There is a server related error');  
 
-        return res.status("201").json(updatedComment)
+        return res.status("201").json({updatedComment})
 
     } catch (err) {
         console.log(err);
@@ -102,7 +102,7 @@ exports.remove_comment_like = async (req, res, next) => {
 
         if (!updatedComment) return res.status('500').json('There is a server related error');  
 
-        return res.status("201").json(updatedComment)
+        return res.status("201").json({updatedComment})
 
     } catch (err) {
         console.log(err);

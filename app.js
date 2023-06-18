@@ -16,6 +16,7 @@ var commentsRouter = require('./routes/comments');
 var followsRouter = require('./routes/follows');
 var likesRouter = require('./routes/likes');
 var postsRouter = require('./routes/posts');
+var settingsRouter = require('./routes/settings');
 
 var app = express();
 
@@ -24,11 +25,11 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 app.use(logger('dev'));
-app.use(cors());
+app.use(cors('*'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static('uploads'));
 
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
@@ -37,6 +38,7 @@ app.use('/comments', commentsRouter);
 app.use('/follows', followsRouter);
 app.use('/posts', postsRouter);
 app.use('/likes', likesRouter);
+app.use('/settings', settingsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

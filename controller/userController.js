@@ -23,7 +23,7 @@ exports.get_user = async (req, res, next) => {
     }
 
     const userWithoutPassword = exclude(user, ['password']);
-    return res.json(userWithoutPassword);
+    return res.json({userWithoutPassword});
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
@@ -50,26 +50,40 @@ exports.patch_my_profile = async (req, res, next) => {
     if (!req.user) return res.status('401').json('Unauthorized');
 
     const { fullName, interests, bio } = req.body;
-    const avatar = req.file.path;
 
     if (!fullName) return res.status('400').json('Fullname is required');
 
-    const updatedUser = await prisma.users.update({
-      where: {
-        id: req.user.id,
-      },
-      data: {
-        fullName: fullName,
-        interests: interests,
-        bio: bio,
-        avatar: avatar,
-      },
-    });
+    if (req.file) {
+        const avatar = req.file.path;
+
+        const updatedUser = await prisma.users.update({
+            where: {
+              id: req.user.id,
+            },
+            data: {
+              fullName: fullName,
+              interests: interests,
+              bio: bio,
+              avatar: avatar,
+            },
+          });
+    }else {
+        const updatedUser = await prisma.users.update({
+            where: {
+              id: req.user.id,
+            },
+            data: {
+              fullName: fullName,
+              interests: interests,
+              bio: bio,
+            },
+          });
+    }
 
     if (!updatedUser) return res.status('401').json("User couldn't found");
 
     const userWithoutPassword = exclude(updatedUser, ['password']);
-    return res.status('201').json(userWithoutPassword);
+    return res.status('201').json({userWithoutPassword});
   } catch (err) {
     console.log(err);
     return res.status('500').json('There is a server related error');
@@ -100,13 +114,13 @@ exports.delete_my_profile = async (req, res, next) => {
         }
     })
 
-    const deletedFollowerFollowings1 = await prisma.followerFollowings.deleteMany({
+    const deletedFollowings = await prisma.follows.deleteMany({
         where: {
             "followerId": userId
         }
     })
 
-    const deletedFollowerFollowings2 = await prisma.followerFollowings.deleteMany({
+    const deletedFollowers = await prisma.follows.deleteMany({
         where: {
             "followingId": userId
         }

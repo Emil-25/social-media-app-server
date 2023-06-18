@@ -1,8 +1,9 @@
 const fs = require('fs');
 
 const { PrismaClient } = require('@prisma/client');
-
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+    log: ['query', 'info', 'warn', 'error'],
+  })
 
 exports.get_user_post = async (req, res, next) => {
   const postId = Number(req.params.postId);
@@ -18,17 +19,7 @@ exports.get_user_post = async (req, res, next) => {
       return res.status('404').json('Post Not Found');
     }
 
-    const user = await prisma.users.findUnique({
-        where: {
-            "id": post.userId
-        }
-    })
-
-    if (!user) {
-        return res.status('404').json('User Not Found');
-    }
-
-    return res.json({post, user});
+    return res.json({post});
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
@@ -59,7 +50,7 @@ exports.get_all_posts = async (req, res, next) => {
 
     if (!posts) return res.status('404').json('No posts');
 
-    return res.json({posts, users});
+    return res.json({posts});
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
@@ -70,7 +61,7 @@ exports.get_following_posts = async (req, res, next) => {
   try {
     if (!req.user) return res.status('401').json('Unauthorized');
 
-    const followings = await prisma.followerfollowings.findMany({
+    const followings = await prisma.follows.findMany({
       where: {
         followerId: req.user.id,
       },
@@ -92,17 +83,7 @@ exports.get_following_posts = async (req, res, next) => {
 
     if (!posts) return res.status('404').json('No posts');
 
-    const users = await prisma.users.findMany({
-        where:{
-            "id":{
-                in: followingIds
-            }
-        }
-    })
-
-    if (!users) return res.status('404').json('No users');
-
-    return res.json({posts, users});
+    return res.json({posts});
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
@@ -113,7 +94,7 @@ exports.post_post = async (req, res, next) => {
   try {
     if (!req.user) return res.status('401').json('Unauthorized');
 
-    const { title, description } = req.body;
+    let { title, description } = req.body;
 
     const url = req.file.path;
 
@@ -124,9 +105,10 @@ exports.post_post = async (req, res, next) => {
 
     const post = await prisma.posts.create({
       data: {
-        url: url,
-        title: title,
-        description: description,
+        "url": url,
+        "title": title,
+        "description": description,
+        "userId": req.user.id
       },
     });
 
@@ -145,7 +127,7 @@ exports.post_post = async (req, res, next) => {
 
     if (!updatedUser) return res.status('500').json('There is a server related error'); 
 
-    return res.status("201").json(post);
+    return res.status("201").json({post});
 
   } catch (err) {
     console.log(err);
