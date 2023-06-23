@@ -6,7 +6,12 @@ const postController = require('../controller/postController');
 
 router.get('/', postController.get_all_posts);
 
-router.post('/', checkAuth, contentUpload.single('url'), postController.post_post);
+router.post(
+  '/',
+  checkAuth,
+  contentUpload.single('url'),
+  postController.post_post
+);
 
 router.get('/followings', checkAuth, postController.get_following_posts);
 

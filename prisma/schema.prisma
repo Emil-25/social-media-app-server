@@ -8,44 +8,48 @@ datasource db {
 }
 
 model comments {
-  id            Int      @id(map: "comments_id_pkey") @unique @default(autoincrement())
-  comment       String   @db.VarChar(511)
-  createdAt     DateTime @default(now()) @db.Timestamp(6)
+  id            Int            @id(map: "comments_id_pkey") @unique @default(autoincrement())
+  comment       String         @db.VarChar(511)
+  createdAt     DateTime       @default(now()) @db.Timestamp(6)
   userId        Int
   postId        Int
-  numberOfLikes Int?     @default(0)
-  posts         posts    @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  users         users    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  numberOfLikes Int?           @default(0)
+  commentLikes  commentLikes[]
+  posts         posts          @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users         users          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model posts {
-  id            Int        @id(map: "posts_id_pkey") @unique @default(autoincrement())
-  title         String     @db.VarChar(255)
+  id            Int         @id(map: "posts_id_pkey") @unique @default(autoincrement())
+  title         String      @db.VarChar(255)
   description   String?
   userId        Int
-  url           String?    @unique(map: "posts_url_unique")
-  createdAt     DateTime   @default(now()) @db.Timestamp(6)
-  numberOfLikes Int?       @default(0)
+  url           String?     @unique(map: "posts_url_unique")
+  createdAt     DateTime    @default(now()) @db.Timestamp(6)
+  numberOfLikes Int?        @default(0)
   commentIds    Int[]
   comments      comments[]
-  users         users      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  postLikes     postLikes[]
+  users         users       @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model users {
-  id                                 Int        @id(map: "users_id_pkey") @unique @default(autoincrement())
-  fullName                           String     @db.VarChar(255)
-  email                              String     @unique @db.VarChar(255)
-  password                           String     @db.VarChar(255)
-  bio                                String?    @default("I love LimeLink!")
-  avatar                             String?    @db.VarChar(511)
-  interests                          String[]   @db.VarChar(255)
-  birthDate                          DateTime?  @db.Date
-  isPrivate                          Boolean    @default(false)
-  isOnline                           Boolean    @default(false)
+  id                                 Int            @id(map: "users_id_pkey") @unique @default(autoincrement())
+  fullName                           String         @db.VarChar(255)
+  email                              String         @unique @db.VarChar(255)
+  password                           String         @db.VarChar(255)
+  bio                                String?        @default("I love LimeLink!")
+  avatar                             String?        @db.VarChar(511)
+  interests                          String[]       @db.VarChar(255)
+  birthDate                          DateTime?      @db.Date
+  isPrivate                          Boolean        @default(false)
+  isOnline                           Boolean        @default(false)
   postIds                            Int[]
+  commentLikes                       commentLikes[]
   comments                           comments[]
-  follows_follows_followerIdTousers  follows[]  @relation("follows_followerIdTousers")
-  follows_follows_followingIdTousers follows[]  @relation("follows_followingIdTousers")
+  follows_follows_followerIdTousers  follows[]      @relation("follows_followerIdTousers")
+  follows_follows_followingIdTousers follows[]      @relation("follows_followingIdTousers")
+  postLikes                          postLikes[]
   posts                              posts[]
 }
 
@@ -56,4 +60,20 @@ model follows {
   users_follows_followingIdTousers users @relation("follows_followingIdTousers", fields: [followingId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@id([followerId, followingId], map: "follows_followerId_followingId_pkey")
+}
+
+model commentLikes {
+  id        Int      @id(map: "commentLikes_id_pkey") @default(autoincrement())
+  userId    Int
+  commentId Int
+  comments  comments @relation(fields: [commentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users     users    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model postLikes {
+  id     Int   @id(map: "postLikes_id_pkey") @default(autoincrement())
+  userId Int
+  postId Int
+  posts  posts @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users  users @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }

@@ -53,6 +53,22 @@ CREATE TABLE "follows" (
     CONSTRAINT "follows_followerId_followingId_pkey" PRIMARY KEY ("followerId", "followingId")
 );
 
+CREATE TABLE "postLikes" (
+    "id" SERIAL,
+    "userId" INTEGER NOT NULL,
+    "postId" INTEGER NOT NULL,
+
+    CONSTRAINT "postLikes_id_pkey" PRIMARY KEY ("id")
+);
+
+CREATE TABLE "commentLikes" (
+    "id" SERIAL,
+    "userId" INTEGER NOT NULL,
+    "commentId" INTEGER NOT NULL,
+
+    CONSTRAINT "commentLikes_id_pkey" PRIMARY KEY ("id")
+);
+
 CREATE UNIQUE INDEX "users_id_key" ON "users"("id");
 
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
@@ -70,3 +86,11 @@ ALTER TABLE "comments" ADD CONSTRAINT "comments_postId_fkey" FOREIGN KEY ("postI
 ALTER TABLE "follows" ADD CONSTRAINT "follows_followerId_fkey" FOREIGN KEY ("followerId") REFERENCES "users" ("id") ON DELETE CASCADE;
 
 ALTER TABLE "follows" ADD CONSTRAINT "follows_followingId_fkey" FOREIGN KEY ("followingId") REFERENCES "users" ("id") ON DELETE CASCADE;
+
+ALTER TABLE "postLikes" ADD CONSTRAINT "postLikes_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE;
+
+ALTER TABLE "postLikes" ADD CONSTRAINT "postLikes_postId_fkey" FOREIGN KEY ("postId") REFERENCES "posts" ("id") ON DELETE CASCADE;
+
+ALTER TABLE "commentLikes" ADD CONSTRAINT "commentLikes_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE;
+
+ALTER TABLE "commentLikes" ADD CONSTRAINT "commentLikes_commentId_fkey" FOREIGN KEY ("commentId") REFERENCES "comments" ("id") ON DELETE CASCADE;

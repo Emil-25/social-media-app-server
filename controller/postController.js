@@ -1,9 +1,8 @@
 const fs = require('fs');
+const {isImage, isVideo} = require('../utils/checkFileTypes');
 
 const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient({
-    log: ['query', 'info', 'warn', 'error'],
-  })
+const prisma = new PrismaClient();
 
 exports.get_user_post = async (req, res, next) => {
   const postId = Number(req.params.postId);
@@ -19,7 +18,7 @@ exports.get_user_post = async (req, res, next) => {
       return res.status('404').json('Post Not Found');
     }
 
-    return res.json({post});
+    return res.json({ post });
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
@@ -50,7 +49,7 @@ exports.get_all_posts = async (req, res, next) => {
 
     if (!posts) return res.status('404').json('No posts');
 
-    return res.json({posts});
+    return res.json({ posts });
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
@@ -83,7 +82,7 @@ exports.get_following_posts = async (req, res, next) => {
 
     if (!posts) return res.status('404').json('No posts');
 
-    return res.json({posts});
+    return res.json({ posts });
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
@@ -96,6 +95,21 @@ exports.post_post = async (req, res, next) => {
 
     let { title, description } = req.body;
 
+    if (!isImage(req.file.filename) && !isVideo(req.file.filename)) {
+        const filePath = req.file.path;
+
+        fs.unlink(filePath, (err) => {
+        if (err) {
+            console.error('Error deleting file:', err);
+            return res.status('400').json('Only Image and Video files are allowed!');
+        }
+
+        console.log('File deleted successfully');
+        });
+
+        return res.status('400').json('Only Image and Video files are allowed!');
+    }
+
     const url = req.file.path;
 
     if (!title && !url)
@@ -105,14 +119,14 @@ exports.post_post = async (req, res, next) => {
 
     const post = await prisma.posts.create({
       data: {
-        "url": url,
-        "title": title,
-        "description": description,
-        "userId": req.user.id
+        url: url,
+        title: title,
+        description: description,
+        userId: req.user.id,
       },
     });
 
-    if (!post) return res.status('500').json('There is a server related error'); 
+    if (!post) return res.status('500').json('There is a server related error');
 
     const updatedUser = await prisma.users.update({
       where: {
@@ -125,10 +139,10 @@ exports.post_post = async (req, res, next) => {
       },
     });
 
-    if (!updatedUser) return res.status('500').json('There is a server related error'); 
+    if (!updatedUser)
+      return res.status('500').json('There is a server related error');
 
-    return res.status("201").json({post});
-
+    return res.status('201').json({ post });
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
@@ -146,7 +160,8 @@ exports.delete_post = async (req, res, next) => {
       },
     });
 
-    if (!updatedUser) return res.status('500').json('There is a server related error'); 
+    if (!updatedUser)
+      return res.status('500').json('There is a server related error');
 
     const filePath = deletedPost.url;
 

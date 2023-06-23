@@ -6,7 +6,7 @@ exports.get_user_followers = async (req, res, next) => {
   const userId = Number(req.params.followerId);
 
   try {
-    const followers = prisma.follows.findMany({
+    const followers = await prisma.follows.findMany({
       where: {
         followingId: userId,
       },
@@ -25,7 +25,7 @@ exports.get_user_followers = async (req, res, next) => {
       },
     });
 
-    res.json({followerUsers});
+    res.json({ followerUsers });
   } catch (err) {
     console.log(err);
     return res.status('500').json('There is a server related error');
@@ -36,7 +36,7 @@ exports.get_user_followings = async (req, res, next) => {
   const userId = Number(req.params.followingId);
 
   try {
-    const followings = prisma.follows.findMany({
+    const followings = await prisma.follows.findMany({
       where: {
         followerId: userId,
       },
@@ -55,7 +55,7 @@ exports.get_user_followings = async (req, res, next) => {
       },
     });
 
-    res.json({followingUsers});
+    res.json({ followingUsers });
   } catch (err) {
     console.log(err);
     return res.status('500').json('There is a server related error');
@@ -85,7 +85,7 @@ exports.get_my_followers = async (req, res, next) => {
       },
     });
 
-    res.json({followerUsers});
+    res.json({ followerUsers });
   } catch (err) {
     console.log(err);
     return res.status('500').json('There is a server related error');
@@ -115,7 +115,7 @@ exports.get_my_followings = async (req, res, next) => {
       },
     });
 
-    res.json({followingUsers});
+    res.json({ followingUsers });
   } catch (err) {
     console.log(err);
     return res.status('500').json('There is a server related error');
@@ -187,3 +187,25 @@ exports.delete_my_follower = async (req, res, next) => {
     return res.status('500').json('There is a server related error');
   }
 };
+
+exports.is_my_following = async (req, res, next) => {
+    const userId = Number(req.params.followingId);
+
+    try {
+        if (!req.user) return res.status('401').json('Unauthorized');
+        const isFollowing = await prisma.follows.findFirst({
+            where: {
+                "followingId": req.user.id,
+                "followerId": userId
+            }
+        })
+
+        if (!isFollowing) return res.json({isFollowing: false})
+
+        return res.json({isFollowing: true})
+    } catch (err) {
+        console.log(err);
+        return res.status('500').json('There is a server related error');
+    }
+
+}
