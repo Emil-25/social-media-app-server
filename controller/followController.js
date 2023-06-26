@@ -195,8 +195,8 @@ exports.is_my_following = async (req, res, next) => {
         if (!req.user) return res.status('401').json('Unauthorized');
         const isFollowing = await prisma.follows.findFirst({
             where: {
-                "followingId": req.user.id,
-                "followerId": userId
+                "followingId": userId,
+                "followerId": req.user.iduserId
             }
         })
 

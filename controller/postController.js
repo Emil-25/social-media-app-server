@@ -6,7 +6,6 @@ const prisma = new PrismaClient();
 
 exports.get_user_post = async (req, res, next) => {
   const postId = Number(req.params.postId);
-
   try {
     const post = await prisma.posts.findUnique({
       where: {
@@ -19,6 +18,26 @@ exports.get_user_post = async (req, res, next) => {
     }
 
     return res.json({ post });
+  } catch (err) {
+    console.log(err);
+    res.status('500').json('There is a server related error');
+  }
+};
+
+exports.get_user_posts = async (req, res, next) => {
+  const userId = Number(req.params.userId);
+  try {
+    const posts = await prisma.posts.findMany({
+      where: {
+        userId: userId,
+      },
+    });
+
+    if (!posts) {
+      return res.status('404').json('Post Not Found');
+    }
+
+    return res.json({ posts });
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
@@ -43,7 +62,7 @@ exports.get_all_posts = async (req, res, next) => {
     const posts = await prisma.posts.findMany({
       // Repeated func
       where: {
-        id: { in: userIds },
+        "userId": { in: userIds },
       },
     });
 

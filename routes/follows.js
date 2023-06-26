@@ -32,4 +32,6 @@ router.get('/followers/:followerId', followController.get_user_followers);
 
 router.get('/followings/:followingId', followController.get_user_followers);
 
+router.get('/isMyFollowing/:followingId', checkAuth, followController.is_my_following)
+
 module.exports = router;

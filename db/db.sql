@@ -15,6 +15,7 @@ CREATE TABLE "users" (
     "birthDate" DATE,
     "isPrivate" BOOLEAN NOT NULL DEFAULT FALSE,
     "isOnline" BOOLEAN NOT NULL DEFAULT FALSE,
+    "alwaysOffline" BOOLEAN NOT NULL DEFAULT FALSE,
     "postIds" INTEGER [],
 
     CONSTRAINT "users_id_pkey" PRIMARY KEY ("id"),

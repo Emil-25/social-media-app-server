@@ -39,7 +39,7 @@ exports.get_all_users = async (req, res, next) => {
       return res.status('404').json('No User Found');
     }
 
-    return res.json(users);
+    return res.json({users});
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');

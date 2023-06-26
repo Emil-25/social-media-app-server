@@ -45,6 +45,7 @@ model users {
   isPrivate                          Boolean        @default(false)
   isOnline                           Boolean        @default(false)
   postIds                            Int[]
+  alwaysOffline                      Boolean        @default(false)
   commentLikes                       commentLikes[]
   comments                           comments[]
   follows_follows_followerIdTousers  follows[]      @relation("follows_followerIdTousers")

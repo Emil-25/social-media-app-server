@@ -17,6 +17,8 @@ router.post(
   authController.log_in_user
 );
 
+router.post('/login/google', authController.log_in_google_user)
+
 router.get('/me', checkAuth, authController.get_me);
 
 module.exports = router;

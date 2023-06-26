@@ -9,4 +9,8 @@ router.patch(
   settingController.post_private_account
 );
 
+router.get('/setOnline', checkAuth, settingController.set_online);
+
+router.patch('/alwaysOffline', settingController.patch_alwaysOffline);
+
 module.exports = router;

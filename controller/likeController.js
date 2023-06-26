@@ -4,7 +4,6 @@ const prisma = new PrismaClient();
 
 exports.get_post_like = async (req, res, next) => {
   const postId = Number(req.params.postId);
-
   try {
     if (!req.user) return res.status('401').json('Unauthorized');
 
@@ -15,9 +14,9 @@ exports.get_post_like = async (req, res, next) => {
       },
     });
 
-    if (!liked) return res.status(404).json('Not liked');
+    if (!liked) return res.json({liked: false});
 
-    return res.json(liked);
+    return res.json({liked: true});
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
@@ -37,9 +36,9 @@ exports.get_comment_like = async (req, res, next) => {
       },
     });
 
-    if (!liked) return res.status(404).json('Not liked');
+    if (!liked) return res.json({liked:false});
 
-    return res.json(liked);
+    return res.json({liked:true});
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
