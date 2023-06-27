@@ -179,7 +179,7 @@ exports.delete_post = async (req, res, next) => {
       },
     });
 
-    if (!updatedUser)
+    if (!deletedPost)
       return res.status('500').json('There is a server related error');
 
     const filePath = deletedPost.url;
@@ -199,3 +199,4 @@ exports.delete_post = async (req, res, next) => {
     res.status('500').json('There is a server related error');
   }
 };
+

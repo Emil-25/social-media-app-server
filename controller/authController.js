@@ -125,6 +125,52 @@ exports.sign_up_user = async (req, res, next) => {
   }
 };
 
+exports.sign_up_google_user = async (req, res, next) => {
+  try {
+    const { fullName, email, password, avatar } = req.body;
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await prisma.users.create({
+      data: {
+        fullName: fullName,
+        email: email,
+        password: hashedPassword,
+        avatar: avatar
+      },
+    });
+
+    const follow = await prisma.follows.create({
+      data: {
+        followerId: user.id,
+        followingId: user.id,
+      },
+    });
+
+    if (!user || !follow)
+      return res.status('500').json('There is a server related error');
+
+    const token = JWT.sign(
+      {
+        id: user.id,
+        email: user.email,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: '10d',
+      }
+    );
+
+    return res.status('201').json({
+      user,
+      token,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status('500').json('There is a server related error');
+  }
+};
+
 exports.log_in_validation = () => {
   return [
     body('email')
@@ -201,6 +247,7 @@ exports.log_in_user = async (req, res, next) => {
     res.status('500').json('There is a server related error');
   }
 };
+
 exports.log_in_google_user = async (req, res, next) => {
   try {
     const email = req.body.email;

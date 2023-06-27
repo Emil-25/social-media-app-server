@@ -2,11 +2,11 @@ const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
-exports.post_private_account = async (req, res, next) => {
+exports.patch_private_account = async (req, res, next) => {
   try {
     if (!req.user) return res.status('401').json('Unauthorized');
 
-    const privateAccount = req.body;
+    const privateAccount = req.body.privateAccount;
 
     const updatedUser = await prisma.users.update({
       where: {

@@ -6,11 +6,11 @@ const settingController = require('../controller/settingController');
 router.patch(
   '/privateAccount',
   checkAuth,
-  settingController.post_private_account
+  settingController.patch_private_account
 );
 
 router.get('/setOnline', checkAuth, settingController.set_online);
 
-router.patch('/alwaysOffline', settingController.patch_alwaysOffline);
+router.patch('/alwaysOffline', checkAuth, settingController.patch_alwaysOffline);
 
 module.exports = router;

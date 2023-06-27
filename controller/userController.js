@@ -121,33 +121,31 @@ exports.delete_my_profile = async (req, res, next) => {
 
     if (!deletedUser) res.status('401').json("User couldn't found");
 
-    const deletedPosts = await prisma.posts.deleteMany({
-      where: {
-        userId: deletedUser.id,
-      },
-    });
-
-    const deletedComments = await prisma.comments.deleteMany({
-      where: {
-        userId: deletedUser.id,
-      },
-    });
-
-    const deletedFollowings = await prisma.follows.deleteMany({
-      where: {
-        followerId: userId,
-      },
-    });
-
-    const deletedFollowers = await prisma.follows.deleteMany({
-      where: {
-        followingId: userId,
-      },
-    });
-
     return res.json('User Deleted');
   } catch (err) {
     console.log(err);
     return res.status('500').json('There is a server related error');
   }
 };
+
+exports.find_user = async (req, res, next) => {
+    try {
+
+        const text = req.body.text;
+
+        const users = await prisma.users.findMany({
+            where: {
+                fullName: {
+                    contains: text,
+                    mode: 'insensitive'
+                }
+            }
+        })
+
+        res.json({ users })
+        
+    } catch (err) {
+        console.log(err);
+        return res.status('500').json('There is a server related error');
+    }
+}

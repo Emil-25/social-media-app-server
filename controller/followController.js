@@ -196,7 +196,7 @@ exports.is_my_following = async (req, res, next) => {
         const isFollowing = await prisma.follows.findFirst({
             where: {
                 "followingId": userId,
-                "followerId": req.user.iduserId
+                "followerId": req.user.id
             }
         })
 

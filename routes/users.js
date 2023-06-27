@@ -15,6 +15,8 @@ router.patch(
 
 router.delete('/me', checkAuth, userController.delete_my_profile);
 
+router.post('/find', userController.find_user)
+
 router.get('/:id', userController.get_user);
 
 module.exports = router;
