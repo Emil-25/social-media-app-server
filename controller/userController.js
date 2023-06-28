@@ -28,6 +28,8 @@ exports.get_user = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -43,6 +45,8 @@ exports.get_all_users = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -106,12 +110,33 @@ exports.patch_my_profile = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     return res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
 exports.delete_my_profile = async (req, res, next) => {
   try {
     if (!req.user) return res.status('401').json('Unauthorized');
+
+    const posts = await prisma.users.findMany({
+        where: {
+            "userId": req.user.id
+        }
+    })
+
+    posts.map(async (post) => {
+        const filePath = post.url;
+
+        await fs.unlink(filePath, (err) => {
+            if (err) {
+              console.error('Error deleting file:', err);
+              return res.status('500').json('There is a server related error');
+            }
+      
+            console.log('File deleted successfully');
+          });
+    })
 
     const deletedUser = await prisma.users.delete({
       where: {
@@ -125,6 +150,8 @@ exports.delete_my_profile = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     return res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -147,5 +174,8 @@ exports.find_user = async (req, res, next) => {
     } catch (err) {
         console.log(err);
         return res.status('500').json('There is a server related error');
-    }
+    } finally {
+        prisma.$disconnect()
+      }
 }
+ 

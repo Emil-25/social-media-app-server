@@ -20,6 +20,8 @@ exports.get_post_like = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -42,6 +44,8 @@ exports.get_comment_like = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -78,6 +82,8 @@ exports.add_post_like = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -122,6 +128,8 @@ exports.remove_post_like = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -159,6 +167,8 @@ exports.add_comment_like = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -204,5 +214,7 @@ exports.remove_comment_like = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };

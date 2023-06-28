@@ -24,6 +24,8 @@ exports.patch_private_account = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -72,7 +74,9 @@ exports.set_online = async (req, res, next) => {
     } catch (err) {
         console.log(err);
         res.status('500').json('There is a server related error');
-    }
+    } finally {
+        prisma.$disconnect()
+      }
 }
 
 exports.patch_alwaysOffline = async (req, res, next) => {
@@ -97,5 +101,7 @@ exports.patch_alwaysOffline = async (req, res, next) => {
     } catch (err) {
         console.log(err);
         res.status('500').json('There is a server related error');
-    }
+    } finally {
+        prisma.$disconnect()
+      }
 }

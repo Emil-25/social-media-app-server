@@ -22,6 +22,8 @@ exports.get_post_comments = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -61,5 +63,7 @@ exports.post_comment = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };

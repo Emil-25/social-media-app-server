@@ -35,6 +35,7 @@ exports.sign_up_validation = () => {
         if (existingUser) {
           throw Error();
         }
+        prisma.$disconnect()
 
         return true;
       })
@@ -122,6 +123,8 @@ exports.sign_up_user = async (req, res, next) => {
   } catch (error) {
     console.log(error);
     res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -168,6 +171,8 @@ exports.sign_up_google_user = async (req, res, next) => {
   } catch (error) {
     console.log(error);
     res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -245,6 +250,8 @@ exports.log_in_user = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -284,6 +291,8 @@ exports.log_in_google_user = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
+  } finally {
+        prisma.$disconnect()
   }
 };
 
@@ -316,5 +325,7 @@ exports.get_me = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };

@@ -21,6 +21,8 @@ exports.get_user_post = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -37,10 +39,20 @@ exports.get_user_posts = async (req, res, next) => {
       return res.status('404').json('Post Not Found');
     }
 
+    const user = await prisma.users.findUnique({
+        where: {
+            "id": userId
+        }
+    })
+
+    if (user.isPrivate) return res.status(403).json("Account is Private")
+
     return res.json({ posts });
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -72,6 +84,8 @@ exports.get_all_posts = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -105,6 +119,8 @@ exports.get_following_posts = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -165,6 +181,8 @@ exports.post_post = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -197,6 +215,8 @@ exports.delete_post = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 

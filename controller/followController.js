@@ -29,6 +29,8 @@ exports.get_user_followers = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     return res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -59,6 +61,8 @@ exports.get_user_followings = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     return res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -89,6 +93,8 @@ exports.get_my_followers = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     return res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -119,6 +125,8 @@ exports.get_my_followings = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     return res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -141,6 +149,8 @@ exports.add_my_following = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     return res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -163,6 +173,8 @@ exports.delete_my_following = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     return res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -185,6 +197,8 @@ exports.delete_my_follower = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     return res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect()
   }
 };
 
@@ -206,6 +220,8 @@ exports.is_my_following = async (req, res, next) => {
     } catch (err) {
         console.log(err);
         return res.status('500').json('There is a server related error');
-    }
+    } finally {
+        prisma.$disconnect()
+      }
 
 }
