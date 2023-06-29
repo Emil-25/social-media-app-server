@@ -13,7 +13,7 @@ router.post(
   postController.post_post
 );
 
-router.get('/user/:userId', postController.get_user_posts)
+router.get('/user/:userId', postController.get_user_posts);
 
 router.get('/followings', checkAuth, postController.get_following_posts);
 

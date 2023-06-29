@@ -30,7 +30,7 @@ exports.get_user_followers = async (req, res, next) => {
     console.log(err);
     return res.status('500').json('There is a server related error');
   } finally {
-    prisma.$disconnect()
+    prisma.$disconnect();
   }
 };
 
@@ -62,7 +62,7 @@ exports.get_user_followings = async (req, res, next) => {
     console.log(err);
     return res.status('500').json('There is a server related error');
   } finally {
-    prisma.$disconnect()
+    prisma.$disconnect();
   }
 };
 
@@ -94,7 +94,7 @@ exports.get_my_followers = async (req, res, next) => {
     console.log(err);
     return res.status('500').json('There is a server related error');
   } finally {
-    prisma.$disconnect()
+    prisma.$disconnect();
   }
 };
 
@@ -126,7 +126,7 @@ exports.get_my_followings = async (req, res, next) => {
     console.log(err);
     return res.status('500').json('There is a server related error');
   } finally {
-    prisma.$disconnect()
+    prisma.$disconnect();
   }
 };
 
@@ -150,7 +150,7 @@ exports.add_my_following = async (req, res, next) => {
     console.log(err);
     return res.status('500').json('There is a server related error');
   } finally {
-    prisma.$disconnect()
+    prisma.$disconnect();
   }
 };
 
@@ -174,7 +174,7 @@ exports.delete_my_following = async (req, res, next) => {
     console.log(err);
     return res.status('500').json('There is a server related error');
   } finally {
-    prisma.$disconnect()
+    prisma.$disconnect();
   }
 };
 
@@ -198,30 +198,29 @@ exports.delete_my_follower = async (req, res, next) => {
     console.log(err);
     return res.status('500').json('There is a server related error');
   } finally {
-    prisma.$disconnect()
+    prisma.$disconnect();
   }
 };
 
 exports.is_my_following = async (req, res, next) => {
-    const userId = Number(req.params.followingId);
+  const userId = Number(req.params.followingId);
 
-    try {
-        if (!req.user) return res.status('401').json('Unauthorized');
-        const isFollowing = await prisma.follows.findFirst({
-            where: {
-                "followingId": userId,
-                "followerId": req.user.id
-            }
-        })
+  try {
+    if (!req.user) return res.status('401').json('Unauthorized');
+    const isFollowing = await prisma.follows.findFirst({
+      where: {
+        followingId: userId,
+        followerId: req.user.id,
+      },
+    });
 
-        if (!isFollowing) return res.json({isFollowing: false})
+    if (!isFollowing) return res.json({ isFollowing: false });
 
-        return res.json({isFollowing: true})
-    } catch (err) {
-        console.log(err);
-        return res.status('500').json('There is a server related error');
-    } finally {
-        prisma.$disconnect()
-      }
-
-}
+    return res.json({ isFollowing: true });
+  } catch (err) {
+    console.log(err);
+    return res.status('500').json('There is a server related error');
+  } finally {
+    prisma.$disconnect();
+  }
+};

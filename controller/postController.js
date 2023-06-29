@@ -1,5 +1,5 @@
 const fs = require('fs');
-const {isImage, isVideo} = require('../utils/checkFileTypes');
+const { isImage, isVideo } = require('../utils/checkFileTypes');
 
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
@@ -22,7 +22,7 @@ exports.get_user_post = async (req, res, next) => {
     console.log(err);
     res.status('500').json('There is a server related error');
   } finally {
-    prisma.$disconnect()
+    prisma.$disconnect();
   }
 };
 
@@ -40,19 +40,19 @@ exports.get_user_posts = async (req, res, next) => {
     }
 
     const user = await prisma.users.findUnique({
-        where: {
-            "id": userId
-        }
-    })
+      where: {
+        id: userId,
+      },
+    });
 
-    if (user.isPrivate) return res.status(403).json("Account is Private")
+    if (user.isPrivate) return res.status(403).json('Account is Private');
 
     return res.json({ posts });
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
   } finally {
-    prisma.$disconnect()
+    prisma.$disconnect();
   }
 };
 
@@ -74,7 +74,7 @@ exports.get_all_posts = async (req, res, next) => {
     const posts = await prisma.posts.findMany({
       // Repeated func
       where: {
-        "userId": { in: userIds },
+        userId: { in: userIds },
       },
     });
 
@@ -85,7 +85,7 @@ exports.get_all_posts = async (req, res, next) => {
     console.log(err);
     res.status('500').json('There is a server related error');
   } finally {
-    prisma.$disconnect()
+    prisma.$disconnect();
   }
 };
 
@@ -120,7 +120,7 @@ exports.get_following_posts = async (req, res, next) => {
     console.log(err);
     res.status('500').json('There is a server related error');
   } finally {
-    prisma.$disconnect()
+    prisma.$disconnect();
   }
 };
 
@@ -131,18 +131,20 @@ exports.post_post = async (req, res, next) => {
     let { title, description } = req.body;
 
     if (!isImage(req.file.filename) && !isVideo(req.file.filename)) {
-        const filePath = req.file.path;
+      const filePath = req.file.path;
 
-        fs.unlink(filePath, (err) => {
+      fs.unlink(filePath, (err) => {
         if (err) {
-            console.error('Error deleting file:', err);
-            return res.status('400').json('Only Image and Video files are allowed!');
+          console.error('Error deleting file:', err);
+          return res
+            .status('400')
+            .json('Only Image and Video files are allowed!');
         }
 
         console.log('File deleted successfully');
-        });
+      });
 
-        return res.status('400').json('Only Image and Video files are allowed!');
+      return res.status('400').json('Only Image and Video files are allowed!');
     }
 
     const url = req.file.path;
@@ -182,7 +184,7 @@ exports.post_post = async (req, res, next) => {
     console.log(err);
     res.status('500').json('There is a server related error');
   } finally {
-    prisma.$disconnect()
+    prisma.$disconnect();
   }
 };
 
@@ -216,7 +218,6 @@ exports.delete_post = async (req, res, next) => {
     console.log(err);
     res.status('500').json('There is a server related error');
   } finally {
-    prisma.$disconnect()
+    prisma.$disconnect();
   }
 };
-

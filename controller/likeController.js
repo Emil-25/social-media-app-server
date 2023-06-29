@@ -14,14 +14,14 @@ exports.get_post_like = async (req, res, next) => {
       },
     });
 
-    if (!liked) return res.json({liked: false});
+    if (!liked) return res.json({ liked: false });
 
-    return res.json({liked: true});
+    return res.json({ liked: true });
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
   } finally {
-    prisma.$disconnect()
+    prisma.$disconnect();
   }
 };
 
@@ -38,14 +38,14 @@ exports.get_comment_like = async (req, res, next) => {
       },
     });
 
-    if (!liked) return res.json({liked:false});
+    if (!liked) return res.json({ liked: false });
 
-    return res.json({liked:true});
+    return res.json({ liked: true });
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
   } finally {
-    prisma.$disconnect()
+    prisma.$disconnect();
   }
 };
 
@@ -83,7 +83,7 @@ exports.add_post_like = async (req, res, next) => {
     console.log(err);
     res.status('500').json('There is a server related error');
   } finally {
-    prisma.$disconnect()
+    prisma.$disconnect();
   }
 };
 
@@ -117,19 +117,20 @@ exports.remove_post_like = async (req, res, next) => {
     if (!liked) return res.status(404).json('Not liked');
 
     const deletedLike = await prisma.postLikes.delete({
-        where: {
-            "id": liked.id
-        }
-    })
+      where: {
+        id: liked.id,
+      },
+    });
 
-    if (!deletedLike) return res.status('500').json('There is a server related error');
+    if (!deletedLike)
+      return res.status('500').json('There is a server related error');
 
     return res.status('201').json({ updatedPost });
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
   } finally {
-    prisma.$disconnect()
+    prisma.$disconnect();
   }
 };
 
@@ -153,22 +154,21 @@ exports.add_comment_like = async (req, res, next) => {
     if (!updatedComment)
       return res.status('500').json('There is a server related error');
 
-      const liked = await prisma.commentLikes.create({
-        data: {
-          userId: req.user.id,
-          commentId: commentId,
-        },
-      });
-  
-      if (!liked) return res.status(404).json('Not liked');
-  
+    const liked = await prisma.commentLikes.create({
+      data: {
+        userId: req.user.id,
+        commentId: commentId,
+      },
+    });
+
+    if (!liked) return res.status(404).json('Not liked');
 
     return res.status('201').json({ updatedComment });
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
   } finally {
-    prisma.$disconnect()
+    prisma.$disconnect();
   }
 };
 
@@ -192,29 +192,29 @@ exports.remove_comment_like = async (req, res, next) => {
     if (!updatedComment)
       return res.status('500').json('There is a server related error');
 
-      const liked = await prisma.commentLikes.findFirst({
-        where: {
-          userId: req.user.id,
-          commentId: commentId,
-        },
-      });
-  
-      if (!liked) return res.status(404).json('Not liked');
-  
-      const deletedLike = await prisma.commentLikes.delete({
-          where: {
-              "id": liked.id
-          }
-      })
-  
-      if (!deletedLike) return res.status('500').json('There is a server related error');
+    const liked = await prisma.commentLikes.findFirst({
+      where: {
+        userId: req.user.id,
+        commentId: commentId,
+      },
+    });
 
+    if (!liked) return res.status(404).json('Not liked');
+
+    const deletedLike = await prisma.commentLikes.delete({
+      where: {
+        id: liked.id,
+      },
+    });
+
+    if (!deletedLike)
+      return res.status('500').json('There is a server related error');
 
     return res.status('201').json({ updatedComment });
   } catch (err) {
     console.log(err);
     res.status('500').json('There is a server related error');
   } finally {
-    prisma.$disconnect()
+    prisma.$disconnect();
   }
 };

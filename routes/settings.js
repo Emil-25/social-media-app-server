@@ -11,6 +11,10 @@ router.patch(
 
 router.get('/setOnline', checkAuth, settingController.set_online);
 
-router.patch('/alwaysOffline', checkAuth, settingController.patch_alwaysOffline);
+router.patch(
+  '/alwaysOffline',
+  checkAuth,
+  settingController.patch_alwaysOffline
+);
 
 module.exports = router;

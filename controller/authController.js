@@ -17,7 +17,9 @@ exports.sign_up_validation = () => {
       .exists()
       .withMessage('Fullname is required')
       .trim()
-      .matches(/^$|^[a-zA-ZčČćĆđĐšŠžŽ-]+ [a-zA-ZčČćĆđĐšŠžŽ-]+( [a-zA-ZčČćĆđĐšŠžŽ-]*)*/)
+      .matches(
+        /^$|^[a-zA-ZčČćĆđĐšŠžŽ-]+ [a-zA-ZčČćĆđĐšŠžŽ-]+( [a-zA-ZčČćĆđĐšŠžŽ-]*)*/
+      )
       .withMessage('Fullname should be consist of both your Name and Surname')
       .escape(),
 
@@ -35,7 +37,7 @@ exports.sign_up_validation = () => {
         if (existingUser) {
           throw Error();
         }
-        prisma.$disconnect()
+        prisma.$disconnect();
 
         return true;
       })
@@ -124,7 +126,7 @@ exports.sign_up_user = async (req, res, next) => {
     console.log(error);
     res.status('500').json('There is a server related error');
   } finally {
-    prisma.$disconnect()
+    prisma.$disconnect();
   }
 };
 
@@ -139,7 +141,7 @@ exports.sign_up_google_user = async (req, res, next) => {
         fullName: fullName,
         email: email,
         password: hashedPassword,
-        avatar: avatar
+        avatar: avatar,
       },
     });
 
@@ -172,7 +174,7 @@ exports.sign_up_google_user = async (req, res, next) => {
     console.log(error);
     res.status('500').json('There is a server related error');
   } finally {
-    prisma.$disconnect()
+    prisma.$disconnect();
   }
 };
 
@@ -191,7 +193,7 @@ exports.log_in_validation = () => {
 
 exports.handle_log_in_validation = (req, res, next) => {
   const result = validationResult(req);
-  console.log(req.body)
+  console.log(req.body);
 
   if (!result.isEmpty()) {
     const formattedResult = result.formatWith((error) => error.msg);
@@ -251,7 +253,7 @@ exports.log_in_user = async (req, res, next) => {
     console.log(err);
     res.status('500').json('There is a server related error');
   } finally {
-    prisma.$disconnect()
+    prisma.$disconnect();
   }
 };
 
@@ -292,7 +294,7 @@ exports.log_in_google_user = async (req, res, next) => {
     console.log(err);
     res.status('500').json('There is a server related error');
   } finally {
-        prisma.$disconnect()
+    prisma.$disconnect();
   }
 };
 
@@ -304,7 +306,7 @@ exports.get_me = async (req, res, next) => {
           id: req.user.id,
         },
       });
-      console.log(1)
+      console.log(1);
       if (!user) {
         return res.status(401).json('Unauthorized');
       }
@@ -318,7 +320,6 @@ exports.get_me = async (req, res, next) => {
 
       const userWithoutPassword = exclude(user, ['password']);
       return res.status('200').json({ userWithoutPassword });
-      
     } else {
       return res.status('401').json('Unauthorized');
     }
@@ -326,6 +327,6 @@ exports.get_me = async (req, res, next) => {
     console.log(err);
     res.status('500').json('There is a server related error');
   } finally {
-    prisma.$disconnect()
+    prisma.$disconnect();
   }
 };
