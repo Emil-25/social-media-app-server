@@ -8,6 +8,8 @@ COPY package*.json ./
 # RUN npm install
 # If you are building your code for production
 RUN npm ci --omit=dev
+RUN npm i -g prisma
+RUN prisma generate
 # Bundle app source
 COPY . .
 EXPOSE 8080
