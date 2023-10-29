@@ -9,3 +9,4 @@ compose.yaml
 README.md
 Dockerfile
 .dockerignore
+secrets

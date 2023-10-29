@@ -3,6 +3,40 @@ services:
   db:
     image: postgres:16
     restart: always
+    container_name: postgres_db
     environment:
-      POSTGRES_PASSWORD: admin123
+      POSTGRES_PASSWORD: run/secrets/db_password
+    ports:
+      -5432:5432
+    volumes:
+    - ./db/data:/var/lib/postgresql/data
+    - ./db/db.sql:/docker-entrypoint-initdb.d/db.sql
+    secrets:
+    - db_password
+
+  frontend:
+    image: emil25/lime-link-client
+    container_name: lime_link_next_js
+    environment:
+      NEXT_PUBLIC_CLIENT_ID: 866391626846-eodbb4avgsm6t7s7usame091f8p6khim.apps.googleusercontent.com
+    ports:
+      -80:80
+      -3000:3000
+    secrets:
+    - client_id
+    - client_secret
+    - jwt_secret
+
+secrets:
+  client_id:
+    file: ./secrets/client_id.txt
+  client_secret:
+    file: ./secrets/client_secret.txt
+  db_password:
+    file: ./secrets/db_passwd.txt
+  jwt_secret:
+    file: ./secrets/jwt_secret.txt
+
+
+
   
