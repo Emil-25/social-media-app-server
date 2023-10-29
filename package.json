@@ -7,6 +7,9 @@
     "dev": "nodemon ./bin/www",
     "prettier": "prettier --write ."
   },
+  "prisma": {
+    "schema": "./prisma/schema.prisma"
+  },
   "dependencies": {
     "@prisma/client": "^4.15.0",
     "bcryptjs": "^2.4.3",
