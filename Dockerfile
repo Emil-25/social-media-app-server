@@ -9,8 +9,9 @@ COPY package*.json ./
 # If you are building your code for production
 RUN npm ci --omit=dev
 RUN npm i -g prisma
-RUN npx prisma generate
 # Bundle app source
 COPY . .
+
+RUN npx prisma generate
 EXPOSE 8080
 CMD [ "node", "./bin/www" ]
