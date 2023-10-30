@@ -1,66 +1,52 @@
 version: '3.8'
-project_name: lime_link
+name: lime_link
 services:
   db:
     image: postgres:16
     restart: always
     container_name: postgres_db
+    env_file:
+      - ./db.env
     environment:
-      POSTGRES_PASSWORD_FILE: run/secrets/db_password
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - 5432:5432
     volumes:
       - ./db/data:/var/lib/postgresql/data
       - ./db/db.sql:/docker-entrypoint-initdb.d/db.sql
-    secrets:
-      - db_password
 
   frontend:
     depends_on:
       - backend
     image: emil25/lime-link-client
     container_name: lime_link_next_js
+    env_file:
+      - ./frontend.env
     environment:
-      NEXT_PUBLIC_CLIENT_ID_FILE: /run/secrets/client_id
-      NEXT_PUBLIC_CLIENT_SECRET_FILE: /run/secrets/client_secret
-      NEXT_PUBLIC_JWT_SECRET_FILE: /run/secrets/jwt_secret
+      NEXT_PUBLIC_CLIENT_ID: ${NEXT_PUBLIC_CLIENT_ID}
+      NEXT_PUBLIC_CLIENT_SECRET: ${NEXT_PUBLIC_CLIENT_SECRET}
+      NEXT_PUBLIC_JWT_SECRET: ${NEXT_PUBLIC_JWT_SECRET}
       NEXT_PUBLIC_SERVER_URL: http://localhost:8080
     ports:
       - 80:80
       - 3000:3000
-    secrets:
-      - client_id
-      - client_secret
-      - jwt_secret
   
   backend:
     depends_on:
       - db
     image: emil25/lime-link-server
     container_name: lime-link-express_js
+    env_file:
+      - ./backend.env
     environment:
-      DATABASE_URL_FILE: /run/secrets/db_url
+      DATABASE_URL: ${DATABASE_URL}
       PORT: 8080
-      JWT_SECRET_FILE: /run/secrets/jwt_secret
+      JWT_SECRET: ${JWT_SECRET}
     ports:
       - 8080:8080
     volumes:
       - ./uploads:/usr/src/app/uploads
-    secrets:
-      - db_url
-      - jwt_secret
 
-secrets:
-  client_id:
-    file: ./secrets/client_id.txt
-  client_secret:
-    file: ./secrets/client_secret.txt
-  db_password:
-    file: ./secrets/db_passwd.txt
-  jwt_secret:
-    file: ./secrets/jwt_secret.txt
-  db_url:
-    file: ./secrets/database_url.txt
 
 
 
