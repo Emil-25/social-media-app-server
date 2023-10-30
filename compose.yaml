@@ -5,7 +5,7 @@ services:
     restart: always
     container_name: postgres_db
     environment:
-      POSTGRES_PASSWORD: run/secrets/db_password
+      POSTGRES_PASSWORD_FILE: run/secrets/db_password
     ports:
       - 5432:5432
     volumes:
@@ -20,9 +20,9 @@ services:
     image: emil25/lime-link-client
     container_name: lime_link_next_js
     environment:
-      NEXT_PUBLIC_CLIENT_ID: /run/secrets/client_id
-      NEXT_PUBLIC_CLIENT_SECRET: /run/secrets/client_secret
-      NEXT_PUBLIC_JWT_SECRET: /run/secrets/jwt_secret
+      NEXT_PUBLIC_CLIENT_ID_FILE: /run/secrets/client_id
+      NEXT_PUBLIC_CLIENT_SECRET_FILE: /run/secrets/client_secret
+      NEXT_PUBLIC_JWT_SECRET_FILE: /run/secrets/jwt_secret
       NEXT_PUBLIC_SERVER_URL: http://localhost:8080
     ports:
       - 80:80
@@ -38,11 +38,13 @@ services:
     image: emil25/lime-link-server
     container_name: lime-link-express_js
     environment:
-      DATABASE_URL: /run/secrets/db_url
+      DATABASE_URL_FILE: /run/secrets/db_url
       PORT: 8080
-      JWT_SECRET: /run/secrets/jwt_secret
+      JWT_SECRET_FILE: /run/secrets/jwt_secret
     ports:
       - 8080:8080
+    volumes:
+      - ./uploads:/usr/src/app/uploads
     secrets:
       - db_url
       - jwt_secret
