@@ -7,8 +7,6 @@ services:
     container_name: postgres_db
     env_file:
       - ./db.env
-    environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - 5432:5432
     volumes:
@@ -22,11 +20,6 @@ services:
     container_name: lime_link_next_js
     env_file:
       - ./frontend.env
-    environment:
-      NEXT_PUBLIC_CLIENT_ID: ${NEXT_PUBLIC_CLIENT_ID}
-      NEXT_PUBLIC_CLIENT_SECRET: ${NEXT_PUBLIC_CLIENT_SECRET}
-      NEXT_PUBLIC_JWT_SECRET: ${NEXT_PUBLIC_JWT_SECRET}
-      NEXT_PUBLIC_SERVER_URL: http://localhost:8080
     ports:
       - 80:80
       - 3000:3000
@@ -38,10 +31,6 @@ services:
     container_name: lime-link-express_js
     env_file:
       - ./backend.env
-    environment:
-      DATABASE_URL: ${DATABASE_URL}
-      PORT: 8080
-      JWT_SECRET: ${JWT_SECRET}
     ports:
       - 8080:8080
     volumes:
