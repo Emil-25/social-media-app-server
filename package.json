@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "start-pm2": "pm2 start ./bin/www",
     "start": "node ./bin/www",
     "dev": "nodemon ./bin/www",
     "prettier": "prettier --write ."
