@@ -14,4 +14,4 @@ COPY . .
 
 RUN npx prisma generate
 EXPOSE 8080
-CMD [ "node", "./bin/www" ]
+CMD [ "pm2", "start", "./bin/www" ]
